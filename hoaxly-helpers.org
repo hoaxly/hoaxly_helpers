@@ -237,9 +237,9 @@ class ItemTransformer(object):
                 enriched_item.map("hoaxly_review_rating_badge", prefered_rating_badge)
 
 
-                enriched_item.map("hoaxly_publisher_name", prefered_publisher_name)
-                enriched_item.map("hoaxly_publisher_url", prefered_publisher_url)
-                enriched_item.map("hoaxly_publisher_logo", prefered_publisher_logo)
+                enriched_item.map("hoaxly_review_publisher_name", prefered_publisher_name)
+                enriched_item.map("hoaxly_review_publisher_url", prefered_publisher_url)
+                enriched_item.map("hoaxly_review_publisher_logo", prefered_publisher_logo)
 
 
                 review_item = enriched_item.output_item()
