@@ -16,15 +16,6 @@ def is_string_field(fieldtocheck):
         return fieldtocheck
 
 
-def get_nested(obj, keys):
-    try:
-        for key in keys:
-            obj = obj[key]
-    except KeyError:
-        return None
-    return obj
-
-
 
 class MicrodataExtruction(object):
     """This class extracts microdata."""

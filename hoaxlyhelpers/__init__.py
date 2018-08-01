@@ -1,1 +1,2 @@
-from . import mymiddleware
+from . import microdata-middleware
+from . import itemtranslator-middleware
