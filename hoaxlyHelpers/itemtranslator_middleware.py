@@ -43,7 +43,7 @@ class BuildHoaxlyReviewItem:
     def map(self, target, source):
         try:
             self.fields[target] = get_nested(self.input_item, source)
-
+            logging.info("mapping from %s to %s", source, target)
         except KeyError:
             self.fields[target] = None
 
