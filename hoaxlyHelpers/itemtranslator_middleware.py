@@ -115,6 +115,8 @@ class ItemTransformer(object):
                 yield scraped_item
 
             else:
+
+                logging.debug(scraped_item)
                 enriched_item = BuildHoaxlyReviewItem(scraped_item)
 
 
@@ -153,7 +155,7 @@ class ItemTransformer(object):
 
 
                 review_item = enriched_item.output_item()
-                review_item['url'] = scraped_item['url']
+#                review_item['url'] = scraped_item['url']
                 review_item['source'] = scraped_item['spider']
                 logging.debug(review_item.printReviewItem())
 
