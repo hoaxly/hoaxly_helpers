@@ -1,0 +1,214 @@
+
+* hoaxly Helpers
+
+these are python files used in our scraping process.
+
+** setup the package
+#+BEGIN_SRC python :tangle setup.py
+import os
+from setuptools import setup
+
+# Utility function to read the README file.
+# Used for the long_description.  It's nice, because now 1) we have a top level
+# README file and 2) it's easier to type in the README file than to put a raw
+# string in below ...
+def read(fname):
+    return open(os.path.join(os.path.dirname(__file__), fname)).read()
+
+setup(
+    name = "hoaxlyHelpers",
+    version = "1.0.0",
+    description = ("An helpers for hoaxly"),
+    license = "BSD",
+    packages=['hoaxlyHelpers'],
+
+)
+
+
+#+END_SRC
+** initialize components
+#+BEGIN_SRC python :tangle hoaxlyhelpers/__init__.py :mkdirp t
+from . import mymiddleware
+#+END_SRC
+** mymiddlewares
+*** add microdata to the scraped item
+ #+BEGIN_SRC python :tangle hoaxlyHelpers/microdatamiddleware.py :mkdirp t
+"""
+Spider middleware for enriching item with scraped metadata
+"""
+from __future__ import absolute_import
+import logging
+import scrapy
+from scrapy.http import Request
+import extruct
+
+
+def is_string_field(fieldtocheck):
+
+    if not isinstance(fieldtocheck, str):
+        return
+    else:
+        return fieldtocheck
+
+
+def get_nested(obj, keys):
+    try:
+        for key in keys:
+            obj = obj[key]
+    except KeyError:
+        return None
+    return obj
+
+
+
+class MicrodataExtruction(object):
+    """This class extracts microdata."""
+
+
+    def process_spider_output(self, response, result, spider):
+        """get all metadata and add them as fields to item"""
+        logging.basicConfig(level=logging.DEBUG,
+                            format='%(asctime)s - %(levelname)s - %(message)s')
+        for scraped_item in result:
+            if isinstance(scraped_item, Request):
+                # yield the request without making changes
+                #logging.debug('this is a request and not an item')
+                yield scraped_item
+            else:
+                # if this is an item inspect for microdata
+                data = extruct.extract(
+                    response.body,
+                    response.url,
+                    syntaxes=['microdata', 'opengraph', 'rdfa', 'json-ld'],
+                    uniform=True
+                )
+
+                logging.debug(response.url)
+                scraped_item['url'] = response.url
+                scraped_item['spider'] = spider.name
+
+                if not data:
+                    # if no microdata was found set flag and yield the item
+                    logging.debug('this item has no microdata')
+                    scraped_item['hasMetaData'] = False
+                else:
+                    scraped_item['hasMetaData'] = True
+                    scraped_item['microdatas'] = data
+                yield scraped_item
+ #+END_SRC
+*** after adding microdata in the previous middleware run this middleware to create output item
+ #+BEGIN_SRC python :tangle hoaxlyHelpers/itemtranslatormiddleware.py :mkdirp t
+"""
+Spider middleware for creating storedItem massaging data before save
+"""
+from __future__ import absolute_import
+import logging
+import scrapy
+from scrapy.http import Request
+
+
+def is_string_field(fieldtocheck):
+
+    if not isinstance(fieldtocheck, str):
+        return
+    else:
+        return fieldtocheck
+
+
+def get_nested(obj, keys):
+    try:
+        for key in keys:
+            obj = obj[key]
+    except KeyError:
+        return None
+    return obj
+
+
+class BuildHoaxlyReviewItem:
+    """Takes all the different microdata found for one item and merges the info into a new object representing the hxl item."""
+    fields = {}
+    def __init__(self, input_item):
+        self.input_item = input_item
+
+
+    def map(self, target, source):
+
+        try:
+            self.fields[target] = get_nested(self.input_item, source)
+
+        except KeyError:
+            self.fields[target] = None
+
+    def output_item(self):
+        logging.debug(self.fields.keys())
+
+        title = self.fields['hoaxly_review_title']
+        reviewed_url = self.fields['hoaxly_review_url']
+        ratings = {
+            'badge': self.fields['hoaxly_review_rating_badge'],
+            'originalAlternateName': self.fields['hoaxly_review_rating_alternate'],
+            'bestRating': self.fields['hoaxly_review_rating_best'],
+            'worstRating': self.fields['hoaxly_review_rating_worst'],
+            'originalRatingValue': self.fields['hoaxly_review_rating_value']
+        }
+        outputted_item = HoaxlyReviewItem()
+        outputted_item['hoaxly_review_title'] = title
+        outputted_item['hoaxly_review_url'] = reviewed_url
+        outputted_item['hoaxly_review_rating'] = ratings
+        return outputted_item
+
+
+class HoaxlyReviewItem(scrapy.Item):
+    """a rewritten item to be saved to db enriched with extracted microdata."""
+
+    url = scrapy.Field()
+    hoaxly_review_title = scrapy.Field()
+    hoaxly_review_url = scrapy.Field()
+    hoaxly_review_datePublished = scrapy.Field(serializer=str)
+    hoaxly_review_authors = scrapy.Field()
+    hoaxly_review_rating = scrapy.Field()
+
+    def __str__(self):
+        return str(self.__class__) + ": " + str(self.__dict__)
+
+
+    def printReviewItem(self):
+        return self
+
+
+class ItemTransformer(object):
+    """This class transforms items (run after microdata extraction)."""
+
+
+    def process_spider_output(self, response, result, spider):
+        """get all metadata and add them as fields to item"""
+        logging.basicConfig(level=logging.DEBUG,
+                            format='%(asctime)s - %(levelname)s - %(message)s')
+        for scraped_item in result:
+            if isinstance(scraped_item, Request):
+                # yield the request without making changes
+                yield scraped_item
+            else:
+                enriched_item = BuildHoaxlyReviewItem(scraped_item)
+
+                prefered_title_source = spider.settings['MICROMAP_TITLE_SOURCE']
+                prefered_review_url_source = spider.settings['MICROMAP_REVIEWED_URL_SOURCE']
+                prefered_rating_best = spider.settings['MICROMAP_RATING_BEST']
+                prefered_rating_alternate = spider.settings['MICROMAP_RATING_ALTERNATE']
+                prefered_rating_value = spider.settings['MICROMAP_RATING_VALUE']
+
+
+
+                enriched_item.map("hoaxly_review_title", prefered_title_source)
+                enriched_item.map("hoaxly_review_url", prefered_review_url_source)
+                enriched_item.map("hoaxly_rating_best", prefered_rating_best)
+                enriched_item.map("hoaxly_rating_alternate", prefered_rating_alternate)
+                enriched_item.map("hoaxly_rating_value", prefered_rating_value)
+
+                review_item = enriched_item.output_item()
+                review_item['url'] = scraped_item['url']
+                review_item['source'] = scraped_item['spider']
+                logging.debug(review_item.printReviewItem())
+
+                yield review_item
+ #+END_SRC
