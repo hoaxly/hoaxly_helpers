@@ -230,11 +230,11 @@ class ItemTransformer(object):
                 enriched_item.map("hoaxly_review_date_published", prefered_review_date_published)
 
 
-                enriched_item.map("hoaxly_rating_best", prefered_rating_best)
-                enriched_item.map("hoaxly_rating_worst", prefered_rating_worst)
-                enriched_item.map("hoaxly_rating_alternate", prefered_rating_alternate)
-                enriched_item.map("hoaxly_rating_value", prefered_rating_value)
-                enriched_item.map("hoaxly_rating_badge", prefered_rating_badge)
+                enriched_item.map("hoaxly_review_rating_best", prefered_rating_best)
+                enriched_item.map("hoaxly_review_rating_worst", prefered_rating_worst)
+                enriched_item.map("hoaxly_review_rating_alternate", prefered_rating_alternate)
+                enriched_item.map("hoaxly_review_rating_value", prefered_rating_value)
+                enriched_item.map("hoaxly_review_rating_badge", prefered_rating_badge)
 
 
                 enriched_item.map("hoaxly_publisher_name", prefered_publisher_name)
