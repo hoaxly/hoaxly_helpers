@@ -142,7 +142,7 @@ class BuildHoaxlyReviewItem:
 
         title = self.fields['hoaxly_review_title']
         reviewed_url = self.fields['hoaxly_review_url']
-        review_date_published = self.fields['hoaxly_review_datePublished']
+        review_date_published = self.fields['hoaxly_review_date_published']
         ratings = {
             'badge': self.fields['hoaxly_review_rating_badge'],
             'originalAlternateName': self.fields['hoaxly_review_rating_alternate'],
