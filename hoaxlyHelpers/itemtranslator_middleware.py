@@ -33,6 +33,7 @@ class BuildHoaxlyReviewItem:
     """Takes all the different microdata found for one item and merges the info into a new object representing the hxl item."""
 
     fields = {}
+    fields['hoaxly_review_rating_badge'] = 'n/a'
 
 
     def __init__(self, input_item):
