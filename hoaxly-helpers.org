@@ -17,8 +17,8 @@ def read(fname):
 
 setup(
     name = "hoaxlyHelpers",
-    version = "1.0.0",
-    description = ("An helpers for hoaxly"),
+    version = "1.1.0",
+    description = ("python helpers for hoaxly"),
     license = "BSD",
     packages=['hoaxlyHelpers'],
 
@@ -27,13 +27,13 @@ setup(
 
 #+END_SRC
 ** initialize components
-#+BEGIN_SRC python :tangle hoaxlyhelpers/__init__.py :mkdirp t
-from . import microdata-middleware
-from . import itemtranslator-middleware
+#+BEGIN_SRC python :tangle hoaxlyHelpers/__init__.py :mkdirp t
+from . import microdata_middleware
+from . import itemtranslator_middleware
 #+END_SRC
 ** mymiddlewares
 *** add microdata to the scraped item
- #+BEGIN_SRC python :tangle hoaxlyHelpers/microdata-middleware.py :mkdirp t
+ #+BEGIN_SRC python :tangle hoaxlyHelpers/microdata_middleware.py :mkdirp t
 """
 Spider middleware for enriching item with scraped metadata
 """
@@ -89,7 +89,8 @@ class MicrodataExtruction(object):
                 yield scraped_item
  #+END_SRC
 *** after adding microdata in the previous middleware run this middleware to create output item
- #+BEGIN_SRC python :tangle hoaxlyHelpers/itemtranslator-middleware.py :mkdirp t
+Spider middleware for creating storedItem massaging data before save
+ #+BEGIN_SRC python :tangle hoaxlyHelpers/itemtranslator_middleware.py :mkdirp t :comments org
 """
 Spider middleware for creating storedItem massaging data before save
 """

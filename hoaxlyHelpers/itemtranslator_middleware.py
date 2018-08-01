@@ -1,3 +1,6 @@
+# after adding microdata in the previous middleware run this middleware to create output item
+# Spider middleware for creating storedItem massaging data before save
+
 """
 Spider middleware for creating storedItem massaging data before save
 """
