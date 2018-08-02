@@ -49,7 +49,7 @@ class BuildHoaxlyReviewItem:
 
     def map(self, target, source):
         logging.basicConfig(level=logging.DEBUG,
-                    format='%(asctime)s - %(levelname)s - %(message)s')
+                            format='%(asctime)s - %(levelname)s - %(message)s')
         logging.debug("will try to map to %s", target)
         if not source:
             logging.info("skipping empty mapping to %s", target)

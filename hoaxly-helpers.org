@@ -18,7 +18,7 @@ def read(fname):
 
 setup(
     name = "hoaxlyHelpers",
-    version = "1.1.0",
+    version = "1.1.1",
     description = ("python helpers for hoaxly"),
     license = "BSD",
     packages=['hoaxlyHelpers'],
@@ -63,7 +63,7 @@ class MicrodataExtruction(object):
         for scraped_item in result:
             if isinstance(scraped_item, Request):
                 # yield the request without making changes
-
+                
                 yield scraped_item
             else:
                 # if this is an item inspect for microdata
@@ -138,7 +138,7 @@ class BuildHoaxlyReviewItem:
 
     def map(self, target, source):
         logging.basicConfig(level=logging.DEBUG,
-                    format='%(asctime)s - %(levelname)s - %(message)s')
+                            format='%(asctime)s - %(levelname)s - %(message)s')
         logging.debug("will try to map to %s", target)
         if not source:
             logging.info("skipping empty mapping to %s", target)
