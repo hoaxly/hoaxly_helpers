@@ -33,7 +33,16 @@ class BuildHoaxlyReviewItem:
     """Takes all the different microdata found for one item and merges the info into a new object representing the hxl item."""
 
     fields = {}
+    fields['hoaxly_review_claim'] = 'n/a'
+    fields['hoaxly_review_title'] = 'n/a'
+    fields['hoaxly_review_rating_alternate'] = 'n/a'
     fields['hoaxly_review_rating_badge'] = 'n/a'
+    fields['hoaxly_review_rating_best'] = 'n/a'
+    fields['hoaxly_review_rating_worst'] = 'n/a'
+    fields['hoaxly_review_publisher_name'] = 'n/a'
+    fields['hoaxly_review_publisher_url'] = 'n/a'
+    fields['hoaxly_review_publisher_logo'] = 'n/a'
+    fields['hoaxly_review_date_published'] = 'n/a'
 
 
     def __init__(self, input_item):
@@ -98,6 +107,8 @@ class HoaxlyReviewItem(scrapy.Item):
     hoaxly_review_rating = scrapy.Field()
     hoaxly_review_publisher = scrapy.Field()
     hoaxly_review_claim = scrapy.Field()
+
+
     def __str__(self):
         return str(self.__class__) + ": " + str(self.__dict__)
 
