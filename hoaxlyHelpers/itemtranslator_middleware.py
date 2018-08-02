@@ -1,5 +1,5 @@
 # after adding microdata in the previous middleware run this middleware to create output item
-# Spider middleware for creating storedItem massaging data before save
+#     Spider middleware for creating storedItem massaging data before save
 
 """
 Spider middleware for creating storedItem massaging data before save
@@ -56,6 +56,8 @@ class BuildHoaxlyReviewItem:
         title = self.fields['hoaxly_review_title']
         reviewed_url = self.fields['hoaxly_review_url']
         review_date_published = self.fields['hoaxly_review_date_published']
+        reviewed_claim = self.fields['hoaxly_review_claim']
+
         ratings = {
             'badge': self.fields['hoaxly_review_rating_badge'],
             'originalAlternateName': self.fields['hoaxly_review_rating_alternate'],
@@ -75,6 +77,7 @@ class BuildHoaxlyReviewItem:
         outputted_item['hoaxly_review_url'] = reviewed_url
         outputted_item['hoaxly_review_rating'] = ratings
         outputted_item['hoaxly_review_publisher'] = publisher
+        outputted_item['hoaxly_review_claim'] = reviewed_claim
 
         return outputted_item
 
@@ -91,7 +94,7 @@ class HoaxlyReviewItem(scrapy.Item):
     hoaxly_review_authors = scrapy.Field()
     hoaxly_review_rating = scrapy.Field()
     hoaxly_review_publisher = scrapy.Field()
-
+    hoaxly_review_claim = scrapy.Field()
     def __str__(self):
         return str(self.__class__) + ": " + str(self.__dict__)
 
@@ -125,6 +128,8 @@ class ItemTransformer(object):
                 prefered_title_source = spider.settings['MICROMAP_TITLE_SOURCE']
                 prefered_review_url_source = spider.settings['MICROMAP_REVIEWED_URL_SOURCE']
                 prefered_review_date_published = spider.settings['MICROMAP_REVIEW_DATE_PUBLISHED']
+                prefered_reviewed_claim = spider.settings['MICROMAP_CLAIM_REVIEWED']
+
 
 
                 prefered_rating_best = spider.settings['MICROMAP_RATING_BEST']
@@ -142,6 +147,7 @@ class ItemTransformer(object):
                 enriched_item.map("hoaxly_review_title", prefered_title_source)
                 enriched_item.map("hoaxly_review_url", prefered_review_url_source)
                 enriched_item.map("hoaxly_review_date_published", prefered_review_date_published)
+                enriched_item.map("hoaxly_review_claim", prefered_reviewed_claim)
 
 
                 enriched_item.map("hoaxly_review_rating_best", prefered_rating_best)
