@@ -16,10 +16,8 @@ def is_string_field(fieldtocheck):
         return fieldtocheck
 
 
-
 class MicrodataExtruction(object):
     """This class extracts microdata."""
-
 
     def process_spider_output(self, response, result, spider):
         """get all metadata and add them as fields to item"""
