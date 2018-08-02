@@ -13,7 +13,7 @@ from scrapy.http import Request
 def is_string_field(fieldtocheck):
 
     if not isinstance(fieldtocheck, str):
-        return
+        return None
     else:
         return fieldtocheck
 
@@ -42,9 +42,11 @@ class BuildHoaxlyReviewItem:
 
     def map(self, target, source):
         try:
+            logging.info("will try mapping from %s to %s", source, target)
             self.fields[target] = get_nested(self.input_item, source)
-            logging.info("mapping from %s to %s", source, target)
+            logging.info("ok, mapping from %s to %s", source, target)
         except KeyError:
+            logging.error("sorry, cant map this")
             self.fields[target] = None
 
 
