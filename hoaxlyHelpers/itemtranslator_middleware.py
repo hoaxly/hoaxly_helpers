@@ -41,13 +41,16 @@ class BuildHoaxlyReviewItem:
 
 
     def map(self, target, source):
-        try:
-            logging.info("will try mapping from %s to %s", source, target)
-            self.fields[target] = get_nested(self.input_item, source)
-            logging.info("ok, mapping from %s to %s", source, target)
-        except KeyError:
-            logging.error("sorry, cant map this")
-            self.fields[target] = None
+        if not source:
+            logging.info("skipping empty mapping to %s", target)
+        else:
+            try:
+                logging.info("will try mapping from %s to %s", source, target)
+                self.fields[target] = get_nested(self.input_item, source)
+                logging.info("ok, mapping from %s to %s", source, target)
+            except KeyError:
+                logging.error("sorry, cant map this")
+                self.fields[target] = None
 
 
     def output_item(self):
