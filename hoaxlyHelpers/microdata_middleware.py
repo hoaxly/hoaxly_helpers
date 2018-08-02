@@ -40,8 +40,8 @@ class MicrodataExtruction(object):
                 )
 
                 logging.debug(response.url)
-                scraped_item['url'] = response.url
-                scraped_item['spider'] = spider.name
+#                scraped_item['url'] = response.url
+#                scraped_item['spider'] = spider.name
 
                 if not data:
                     # if no microdata was found set flag and yield the item
