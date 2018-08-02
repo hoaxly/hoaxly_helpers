@@ -26,7 +26,7 @@ class MicrodataExtruction(object):
         for scraped_item in result:
             if isinstance(scraped_item, Request):
                 # yield the request without making changes
-                #logging.debug('this is a request and not an item')
+
                 yield scraped_item
             else:
                 # if this is an item inspect for microdata
@@ -39,7 +39,7 @@ class MicrodataExtruction(object):
 
                 logging.debug(response.url)
                 scraped_item['url'] = response.url
-#                scraped_item['source_spider'] = spider.name
+                # scraped_item['source_spider'] = spider.name
 
                 if not data:
                     # if no microdata was found set flag and yield the item

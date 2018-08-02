@@ -63,7 +63,7 @@ class MicrodataExtruction(object):
         for scraped_item in result:
             if isinstance(scraped_item, Request):
                 # yield the request without making changes
-                #logging.debug('this is a request and not an item')
+
                 yield scraped_item
             else:
                 # if this is an item inspect for microdata
@@ -76,7 +76,7 @@ class MicrodataExtruction(object):
 
                 logging.debug(response.url)
                 scraped_item['url'] = response.url
-#                scraped_item['source_spider'] = spider.name
+                # scraped_item['source_spider'] = spider.name
 
                 if not data:
                     # if no microdata was found set flag and yield the item
@@ -117,7 +117,7 @@ def get_nested(obj, keys):
 
 
 class BuildHoaxlyReviewItem:
-    """Takes all the different microdata found for one item and merges the info into a new object representing the hxl item."""
+    """Takes scraped item and maps it into a new object representing the hxl item."""
 
     fields = {}
     fields['hoaxly_review_claim'] = 'n/a'
@@ -257,11 +257,8 @@ class ItemTransformer(object):
                 enriched_item.map(
                     "hoaxly_review_publisher_logo", prefered_publisher_logo)
 
-
                 review_item = enriched_item.output_item()
                 logging.debug(review_item.printReviewItem())
-
                 review_item['url'] = scraped_item['url']
                 yield review_item
-
     #+END_SRC

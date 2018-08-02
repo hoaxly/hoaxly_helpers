@@ -28,7 +28,7 @@ def get_nested(obj, keys):
 
 
 class BuildHoaxlyReviewItem:
-    """Takes all the different microdata found for one item and merges the info into a new object representing the hxl item."""
+    """Takes scraped item and maps it into a new object representing the hxl item."""
 
     fields = {}
     fields['hoaxly_review_claim'] = 'n/a'
@@ -70,11 +70,12 @@ class BuildHoaxlyReviewItem:
             'originalAlternateName': self.fields['hoaxly_review_rating_alternate'],
             'bestRating': self.fields['hoaxly_review_rating_best'],
             'worstRating': self.fields['hoaxly_review_rating_worst'],
-            'originalRatingValue': self.fields['hoaxly_review_rating_value']}
+            'originalRatingValue': self.fields['hoaxly_review_rating_value']
+        }
         publisher = {
-            'name': self.fields['hoaxly_review_publisher_name'],
-            'logo': self.fields['hoaxly_review_publisher_logo'],
-            'url': self.fields['hoaxly_review_publisher_url']
+            'name':  self.fields['hoaxly_review_publisher_name'],
+            'logo':  self.fields['hoaxly_review_publisher_logo'],
+            'url':  self.fields['hoaxly_review_publisher_url']
         }
 
         outputted_item = HoaxlyReviewItem()
@@ -145,8 +146,7 @@ class ItemTransformer(object):
                 enriched_item.map(
                     "hoaxly_review_url", prefered_review_url_source)
                 enriched_item.map(
-                    "hoaxly_review_date_published",
-                    prefered_review_date_published)
+                    "hoaxly_review_date_published", prefered_review_date_published)
                 enriched_item.map(
                     "hoaxly_review_claim", prefered_reviewed_claim)
 
@@ -155,8 +155,7 @@ class ItemTransformer(object):
                 enriched_item.map(
                     "hoaxly_review_rating_worst", prefered_rating_worst)
                 enriched_item.map(
-                    "hoaxly_review_rating_alternate",
-                    prefered_rating_alternate)
+                    "hoaxly_review_rating_alternate", prefered_rating_alternate)
                 enriched_item.map(
                     "hoaxly_review_rating_value", prefered_rating_value)
                 enriched_item.map(
@@ -171,6 +170,5 @@ class ItemTransformer(object):
 
                 review_item = enriched_item.output_item()
                 logging.debug(review_item.printReviewItem())
-
                 review_item['url'] = scraped_item['url']
                 yield review_item
