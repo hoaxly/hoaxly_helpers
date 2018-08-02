@@ -73,9 +73,9 @@ class BuildHoaxlyReviewItem:
             'originalRatingValue': self.fields['hoaxly_review_rating_value']
         }
         publisher = {
-            'name':  self.fields['hoaxly_review_publisher_name'],
-            'logo':  self.fields['hoaxly_review_publisher_logo'],
-            'url':  self.fields['hoaxly_review_publisher_url']
+            'name': self.fields['hoaxly_review_publisher_name'],
+            'logo': self.fields['hoaxly_review_publisher_logo'],
+            'url': self.fields['hoaxly_review_publisher_url']
         }
 
         outputted_item = HoaxlyReviewItem()
