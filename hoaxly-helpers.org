@@ -97,6 +97,8 @@ from __future__ import absolute_import
 import logging
 import scrapy
 from scrapy.http import Request
+logging.basicConfig(level=logging.DEBUG,
+                    format='%(asctime)s - %(levelname)s - %(message)s')
 
 
 def is_string_field(fieldtocheck):
@@ -135,6 +137,7 @@ class BuildHoaxlyReviewItem:
         self.input_item = input_item
 
     def map(self, target, source):
+        logging.debug("will try to map to %s", target)
         if not source:
             logging.info("skipping empty mapping to %s", target)
         else:
