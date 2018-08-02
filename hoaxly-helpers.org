@@ -77,8 +77,8 @@ class MicrodataExtruction(object):
                 )
 
                 logging.debug(response.url)
-#                scraped_item['url'] = response.url
-#                scraped_item['spider'] = spider.name
+                scraped_item['url'] = response.url
+#                scraped_item['source_spider'] = spider.name
 
                 if not data:
                     # if no microdata was found set flag and yield the item
@@ -248,7 +248,7 @@ class ItemTransformer(object):
                 review_item = enriched_item.output_item()
                 logging.debug(review_item.printReviewItem())
 
-
+                review_item['url'] = scraped_item['url']
                 yield review_item
 
  #+END_SRC

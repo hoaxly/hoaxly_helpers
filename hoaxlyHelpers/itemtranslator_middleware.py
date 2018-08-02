@@ -157,5 +157,5 @@ class ItemTransformer(object):
                 review_item = enriched_item.output_item()
                 logging.debug(review_item.printReviewItem())
 
-
+                review_item['url'] = scraped_item['url']
                 yield review_item
