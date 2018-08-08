@@ -26,7 +26,7 @@ class MicrodataExtruction(object):
         for scraped_item in result:
             if isinstance(scraped_item, Request):
                 # yield the request without making changes
-                
+
                 yield scraped_item
             else:
                 # if this is an item inspect for microdata
