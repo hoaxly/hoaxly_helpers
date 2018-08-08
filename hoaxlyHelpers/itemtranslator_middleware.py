@@ -33,7 +33,7 @@ class BuildHoaxlyReviewItem:
     """Takes scraped item and maps it into a new object representing the hxl item."""
 
     fields = {}
-    fields['hoaxly_review_claim'] = 'n/a'
+
     fields['hoaxly_review_title'] = 'n/a'
     fields['hoaxly_review_rating_alternate'] = 'n/a'
     fields['hoaxly_review_rating_badge'] = 'n/a'
@@ -43,6 +43,9 @@ class BuildHoaxlyReviewItem:
     fields['hoaxly_review_publisher_url'] = 'n/a'
     fields['hoaxly_review_publisher_logo'] = 'n/a'
     fields['hoaxly_review_date_published'] = 'n/a'
+
+    fields['hoaxly_claim_reviewed'] = 'n/a'
+    fields['claim_date_published'] = 'n/a'
 
     def __init__(self, input_item):
         self.input_item = input_item
@@ -68,7 +71,8 @@ class BuildHoaxlyReviewItem:
         title = self.fields['hoaxly_review_title']
         reviewed_url = self.fields['hoaxly_review_url']
         review_date_published = self.fields['hoaxly_review_date_published']
-        reviewed_claim = self.fields['hoaxly_review_claim']
+        reviewed_claim = self.fields['hoaxly_claim_reviewed']
+        reviewed_claim_date_published = self.fields['claim_date_published']
 
         ratings = {
             'badge': self.fields['hoaxly_review_rating_badge'],
@@ -89,7 +93,8 @@ class BuildHoaxlyReviewItem:
         outputted_item['hoaxly_review_url'] = reviewed_url
         outputted_item['hoaxly_review_rating'] = ratings
         outputted_item['hoaxly_review_publisher'] = publisher
-        outputted_item['hoaxly_review_claim'] = reviewed_claim
+        outputted_item['hoaxly_claim_reviewed'] = reviewed_claim
+        outputted_item['hoaxly_claim_date_published'] = reviewed_claim_date_published
 
         return outputted_item
 
@@ -104,7 +109,8 @@ class HoaxlyReviewItem(scrapy.Item):
     hoaxly_review_authors = scrapy.Field()
     hoaxly_review_rating = scrapy.Field()
     hoaxly_review_publisher = scrapy.Field()
-    hoaxly_review_claim = scrapy.Field()
+    hoaxly_claim_reviewed = scrapy.Field()
+    hoaxly_claim_date_published = scrapy.Field()
 
     def __str__(self):
         return str(self.__class__) + ": " + str(self.__dict__)
@@ -146,14 +152,14 @@ class ItemTransformer(object):
                 prefered_publisher_url = spider.settings['MICROMAP_PUBLISHER_URL']
                 prefered_publisher_logo = spider.settings['MICROMAP_PUBLISHER_LOGO']
 
+                prefered_claim_date_published = spider.settings['MICROMAP_CLAIM_DATE_PUBLISHED']
+
                 enriched_item.map(
                     "hoaxly_review_title", prefered_title_source)
                 enriched_item.map(
                     "hoaxly_review_url", prefered_review_url_source)
                 enriched_item.map(
                     "hoaxly_review_date_published", prefered_review_date_published)
-                enriched_item.map(
-                    "hoaxly_review_claim", prefered_reviewed_claim)
 
                 enriched_item.map(
                     "hoaxly_review_rating_best", prefered_rating_best)
@@ -172,6 +178,11 @@ class ItemTransformer(object):
                     "hoaxly_review_publisher_url", prefered_publisher_url)
                 enriched_item.map(
                     "hoaxly_review_publisher_logo", prefered_publisher_logo)
+
+                enriched_item.map(
+                    "hoaxly_claim_reviewed", prefered_reviewed_claim)
+                enriched_item.map(
+                    "hoaxly_claim_date_published", prefered_claim_date_published)
 
                 review_item = enriched_item.output_item()
                 logging.debug(review_item.printReviewItem())
