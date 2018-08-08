@@ -192,6 +192,8 @@ class HoaxlyReviewItem(scrapy.Item):
     """a rewritten item to be saved to db enriched with extracted microdata."""
 
     url = scrapy.Field()
+    spider = scrapy.Field()
+    timestamp = scrapy.Field()
     hoaxly_review_title = scrapy.Field()
     hoaxly_review_url = scrapy.Field()
     hoaxly_review_date_published = scrapy.Field(serializer=str)
@@ -276,5 +278,7 @@ class ItemTransformer(object):
                 review_item = enriched_item.output_item()
                 logging.debug(review_item.printReviewItem())
                 review_item['url'] = scraped_item['url']
+                review_item['spider'] = scraped_item['spider']
+                review_item['timestamp'] = scraped_item['timestamp']
                 yield review_item
     #+END_SRC
