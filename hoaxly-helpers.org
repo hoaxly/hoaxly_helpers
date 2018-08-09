@@ -18,7 +18,7 @@ def read(fname):
 
 setup(
     name="hoaxlyHelpers",
-    version="1.2.1",
+    version="1.2.2",
     description=("python helpers for hoaxly"),
     license="BSD",
     packages=['hoaxlyHelpers'],
@@ -291,3 +291,19 @@ class ItemTransformer(object):
 
                 yield review_item
     #+END_SRC
+** building
+
+#+BEGIN_SRC yaml :tangle .gitlab-ci.yml
+image: tmaier/docker-compose:17.09
+services:
+  - docker:17.09-dind
+stages:
+  - lint
+
+
+lint:
+  stage: lint
+  script:
+    - docker run --rm -v ${CI_PROJECT_DIR}/:/code eeacms/pylint
+
+#+END_SRC
