@@ -46,6 +46,7 @@ class BuildHoaxlyReviewItem:
 
     fields['hoaxly_claim_reviewed'] = 'n/a'
     fields['hoaxly_claim_date_published'] = 'n/a'
+    fields['hoaxly_claim_publisher_name'] = 'n/a'
 
     def __init__(self, input_item):
         self.input_item = input_item
@@ -75,6 +76,7 @@ class BuildHoaxlyReviewItem:
         review_date_published = self.fields['hoaxly_review_date_published']
         reviewed_claim = self.fields['hoaxly_claim_reviewed']
         reviewed_claim_date_published = self.fields['hoaxly_claim_date_published']
+        reviewed_claim_publisher_name = self.fields['hoaxly_claim_publisher_name']
 
         ratings = {
             'badge': self.fields['hoaxly_review_rating_badge'],
@@ -97,6 +99,7 @@ class BuildHoaxlyReviewItem:
         outputted_item['hoaxly_review_publisher'] = publisher
         outputted_item['hoaxly_claim_reviewed'] = reviewed_claim
         outputted_item['hoaxly_claim_date_published'] = reviewed_claim_date_published
+        outputted_item['hoaxly_claim_publisher_name'] = reviewed_claim_publisher_name
 
         return outputted_item
 
@@ -115,6 +118,7 @@ class HoaxlyReviewItem(scrapy.Item):
     hoaxly_review_publisher = scrapy.Field()
     hoaxly_claim_reviewed = scrapy.Field()
     hoaxly_claim_date_published = scrapy.Field()
+    hoaxly_claim_publisher_name = scrapy.Field()
 
     def __str__(self):
         return str(self.__class__) + ": " + str(self.__dict__)
@@ -158,6 +162,7 @@ class ItemTransformer(object):
                 prefered_publisher_logo = spider.settings['MICROMAP_PUBLISHER_LOGO']
 
                 prefered_claim_date_published = spider.settings['MICROMAP_CLAIM_DATE_PUBLISHED']
+                prefered_claim_publisher_name = spider.settings['MICROMAP_CLAIM_PUBLISHER_NAME']
 
                 enriched_item.map(
                     "hoaxly_review_title", prefered_title_source)
@@ -188,6 +193,8 @@ class ItemTransformer(object):
                     "hoaxly_claim_reviewed", prefered_reviewed_claim)
                 enriched_item.map(
                     "hoaxly_claim_date_published", prefered_claim_date_published)
+                enriched_item.map(
+                    "hoaxly_claim_publisher_name", prefered_claim_publisher_name)
 
                 review_item = enriched_item.output_item()
                 review_item['url'] = scraped_item['url']
