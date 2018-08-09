@@ -10,7 +10,7 @@ def read(fname):
 
 setup(
     name="hoaxlyHelpers",
-    version="1.2.1",
+    version="1.2.2",
     description=("python helpers for hoaxly"),
     license="BSD",
     packages=['hoaxlyHelpers'],
