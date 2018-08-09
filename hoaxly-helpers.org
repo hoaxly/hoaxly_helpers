@@ -287,7 +287,7 @@ class ItemTransformer(object):
                 review_item['url'] = scraped_item['url']
                 review_item['spider'] = scraped_item['spider']
                 review_item['timestamp'] = scraped_item['timestamp']
-                logging.debug(review_item.printReviewItem())
+                logging.debug(review_item.print_review_item())
 
                 yield review_item
     #+END_SRC
