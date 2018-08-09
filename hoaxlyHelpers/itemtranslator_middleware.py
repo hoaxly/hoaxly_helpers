@@ -13,14 +13,14 @@ logging.basicConfig(level=logging.DEBUG,
 
 
 def is_string_field(fieldtocheck):
-
+    """ check a field to make sure it is a string """
     if not isinstance(fieldtocheck, str):
         return None
-    else:
-        return fieldtocheck
+    return fieldtocheck
 
 
 def get_nested(obj, keys):
+    """ get a value from a nested object by following a list of keys """
     try:
         for key in keys:
             obj = obj[key]
@@ -45,12 +45,13 @@ class BuildHoaxlyReviewItem:
     fields['hoaxly_review_date_published'] = 'n/a'
 
     fields['hoaxly_claim_reviewed'] = 'n/a'
-    fields['claim_date_published'] = 'n/a'
+    fields['hoaxly_claim_date_published'] = 'n/a'
 
     def __init__(self, input_item):
         self.input_item = input_item
 
     def map(self, target, source):
+        """ prepare a field for building items"""
         logging.basicConfig(level=logging.DEBUG,
                             format='%(asctime)s - %(levelname)s - %(message)s')
         logging.debug("will try to map to %s", target)
@@ -66,13 +67,14 @@ class BuildHoaxlyReviewItem:
                 self.fields[target] = None
 
     def output_item(self):
+        """this methid creates the final review item for output"""
         logging.debug(self.fields.keys())
 
         title = self.fields['hoaxly_review_title']
         reviewed_url = self.fields['hoaxly_review_url']
         review_date_published = self.fields['hoaxly_review_date_published']
         reviewed_claim = self.fields['hoaxly_claim_reviewed']
-        reviewed_claim_date_published = self.fields['claim_date_published']
+        reviewed_claim_date_published = self.fields['hoaxly_claim_date_published']
 
         ratings = {
             'badge': self.fields['hoaxly_review_rating_badge'],
@@ -117,7 +119,8 @@ class HoaxlyReviewItem(scrapy.Item):
     def __str__(self):
         return str(self.__class__) + ": " + str(self.__dict__)
 
-    def printReviewItem(self):
+    def print_review_item(self):
+        """ a way to look at the current object """
         return self
 
 
@@ -187,8 +190,9 @@ class ItemTransformer(object):
                     "hoaxly_claim_date_published", prefered_claim_date_published)
 
                 review_item = enriched_item.output_item()
-                logging.debug(review_item.printReviewItem())
                 review_item['url'] = scraped_item['url']
                 review_item['spider'] = scraped_item['spider']
                 review_item['timestamp'] = scraped_item['timestamp']
+                logging.debug(review_item.printReviewItem())
+
                 yield review_item
