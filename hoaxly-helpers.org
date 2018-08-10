@@ -137,7 +137,6 @@ class BuildHoaxlyReviewItem:
 
     def __init__(self, input_item):
         self.input_item = input_item
-
     def map(self, target, source):
         """ prepare a field for building items"""
         logging.basicConfig(level=logging.DEBUG,
@@ -148,8 +147,12 @@ class BuildHoaxlyReviewItem:
         else:
             try:
                 logging.info("will try mapping from %s to %s", source, target)
-                self.fields[target] = get_nested(self.input_item, source)
-                logging.info("ok, mapping from %s to %s", source, target)
+                valuefromsource = get_nested(self.input_item, source)
+                if not valuefromsource:
+                    logging.error("sorry, empty value")
+                else:
+                    self.fields[target] = get_nested(self.input_item, source)
+                    logging.info("ok, mapping from %s to %s", source, target)
             except KeyError:
                 logging.error("sorry, cant map this")
                 self.fields[target] = None
